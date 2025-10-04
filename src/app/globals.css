@@ -1,0 +1,6 @@
+/* Global styles for the project */
+
+/* Ensure the fixed sidebar sits on top */
+.z-2 {
+  z-index: 2;
+}
