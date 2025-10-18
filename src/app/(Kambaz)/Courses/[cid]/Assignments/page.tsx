@@ -1,3 +1,4 @@
+"use client";
 import {
   ListGroup,
   ListGroupItem,
@@ -8,8 +9,23 @@ import {
 import { FaPlus, FaSearch } from "react-icons/fa";
 import Link from "next/link";
 import { BsGripVertical } from "react-icons/bs";
+import { useParams } from "next/navigation";
+import * as db from "../../../Database";
+
+type Assignment = {
+  course: string;
+  id: string;
+  title: string;
+  description?: string;
+  points?: number;
+  dueDate?: string;
+  availableDate?: string;
+};
 
 export default function Assignments() {
+  const { cid } = useParams();
+  const assignments = db.assignments || [];
+
   return (
     <div>
       <div className="d-flex align-items-center mb-3">
@@ -35,92 +51,41 @@ export default function Assignments() {
       </div>
 
       <ListGroup className="rounded-0">
-        <ListGroupItem className="wd-lesson p-3 mb-3 d-flex align-items-start">
-          <BsGripVertical className="me-3 fs-4 text-muted" />
-          <div className="flex-grow-1">
-            <div className="d-flex justify-content-between align-items-start">
-              <div>
-                <div className="fw-bold">
-                  <Link href="/Courses/1234/Assignments/1">
-                    A1 — Introduction
-                  </Link>
-                </div>
-                <div className="text-muted small">
-                  Due Oct 10 · Opens Oct 1 · 10 pts
-                </div>
-              </div>
-              <div>
-                <Link
-                  href="/Courses/1234/Assignments/1"
-                  className="btn btn-outline-secondary btn-sm me-2"
-                >
-                  Edit
-                </Link>
-                <Button variant="secondary" size="sm">
-                  View
-                </Button>
-              </div>
-            </div>
-          </div>
-        </ListGroupItem>
-
-        <ListGroupItem className="wd-lesson p-3 mb-3 d-flex align-items-start">
-          <BsGripVertical className="me-3 fs-4 text-muted" />
-          <div className="flex-grow-1">
-            <div className="d-flex justify-content-between align-items-start">
-              <div>
-                <div className="fw-bold">
-                  <Link href="/Courses/1234/Assignments/2">
-                    A2 — Project Proposal
-                  </Link>
-                </div>
-                <div className="text-muted small">
-                  Due Oct 20 · Opens Oct 11 · 20 pts
+        {assignments
+          .filter((a: Assignment) => a.course === cid)
+          .map((a: Assignment) => (
+            <ListGroupItem
+              className="wd-lesson p-3 mb-3 d-flex align-items-start"
+              key={a.id}
+            >
+              <BsGripVertical className="me-3 fs-4 text-muted" />
+              <div className="flex-grow-1">
+                <div className="d-flex justify-content-between align-items-start">
+                  <div>
+                    <div className="fw-bold">
+                      <Link href={`/Courses/${cid}/Assignments/${a.id}`}>
+                        {a.title}
+                      </Link>
+                    </div>
+                    <div className="text-muted small">
+                      Due {a.dueDate} · Opens {a.availableDate} · {a.points} pts
+                    </div>
+                  </div>
+                  <div>
+                    <Link
+                      href={`/Courses/${cid}/Assignments/${a.id}`}
+                      className="btn btn-outline-secondary btn-sm me-2"
+                    >
+                      Edit
+                    </Link>
+                    <Button variant="secondary" size="sm">
+                      View
+                    </Button>
+                  </div>
                 </div>
               </div>
-              <div>
-                <Link
-                  href="/Courses/1234/Assignments/2"
-                  className="btn btn-outline-secondary btn-sm me-2"
-                >
-                  Edit
-                </Link>
-                <Button variant="secondary" size="sm">
-                  View
-                </Button>
-              </div>
-            </div>
-          </div>
-        </ListGroupItem>
-
-        <ListGroupItem className="wd-lesson p-3 mb-3 d-flex align-items-start">
-          <BsGripVertical className="me-3 fs-4 text-muted" />
-          <div className="flex-grow-1">
-            <div className="d-flex justify-content-between align-items-start">
-              <div>
-                <div className="fw-bold">
-                  <Link href="/Courses/1234/Assignments/3">
-                    A3 — Final Report
-                  </Link>
-                </div>
-                <div className="text-muted small">
-                  Due Nov 5 · Opens Oct 21 · 30 pts
-                </div>
-              </div>
-              <div>
-                <Link
-                  href="/Courses/1234/Assignments/3"
-                  className="btn btn-outline-secondary btn-sm me-2"
-                >
-                  Edit
-                </Link>
-                <Button variant="secondary" size="sm">
-                  View
-                </Button>
-              </div>
-            </div>
-          </div>
-        </ListGroupItem>
+            </ListGroupItem>
+          ))}
       </ListGroup>
     </div>
   );

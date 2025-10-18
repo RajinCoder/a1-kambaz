@@ -1,0 +1,83 @@
+[
+  {
+    "course": "RS101",
+    "id": "A1",
+    "title": "A1 — Introduction",
+    "description": "Intro assignment for propulsion course",
+    "points": 10,
+    "dueDate": "2023-10-10",
+    "availableDate": "2023-10-01"
+  },
+  {
+    "course": "RS101",
+    "id": "A2",
+    "title": "A2 — Fuel Analysis",
+    "description": "Analyze different fuel types",
+    "points": 20,
+    "dueDate": "2023-10-20",
+    "availableDate": "2023-10-11"
+  },
+  {
+    "course": "RS101",
+    "id": "A3",
+    "title": "A3 — Engine Report",
+    "description": "Final report on engine design",
+    "points": 30,
+    "dueDate": "2023-11-05",
+    "availableDate": "2023-10-21"
+  },
+  {
+    "course": "RS102",
+    "id": "B1",
+    "title": "B1 — Airfoil Design",
+    "description": "Design a basic airfoil",
+    "points": 15,
+    "dueDate": "2023-10-12",
+    "availableDate": "2023-10-02"
+  },
+  {
+    "course": "RS102",
+    "id": "B2",
+    "title": "B2 — Wind Tunnel Report",
+    "description": "Report from wind tunnel experiments",
+    "points": 25,
+    "dueDate": "2023-10-25",
+    "availableDate": "2023-10-13"
+  },
+  {
+    "course": "RS102",
+    "id": "B3",
+    "title": "B3 — High Speed Analysis",
+    "description": "Analyze supersonic flow",
+    "points": 35,
+    "dueDate": "2023-11-10",
+    "availableDate": "2023-10-28"
+  },
+  {
+    "course": "RS103",
+    "id": "C1",
+    "title": "C1 — Systems Overview",
+    "description": "Overview of spacecraft systems",
+    "points": 10,
+    "dueDate": "2023-10-15",
+    "availableDate": "2023-10-05"
+  },
+  {
+    "course": "RS103",
+    "id": "C2",
+    "title": "C2 — Structural Analysis",
+    "description": "Structural design assignment",
+    "points": 20,
+    "dueDate": "2023-10-30",
+    "availableDate": "2023-10-16"
+  },
+  {
+    "course": "RS103",
+    "id": "C3",
+    "title": "C3 — Integration Plan",
+    "description": "Plan for payload integration",
+    "points": 40,
+    "dueDate": "2023-11-20",
+    "availableDate": "2023-11-01"
+  }
+]

@@ -1,0 +1,83 @@
+[
+  {
+    "course": "RS101",
+    "name": "Week 1 - Propulsion Basics",
+    "lessons": [
+      { "id": "RS101-M1-L1", "name": "Introduction to Propulsion" },
+      { "id": "RS101-M1-L2", "name": "Thrust and Momentum" },
+      { "id": "RS101-M1-L3", "name": "Rocket Engines Overview" }
+    ]
+  },
+  {
+    "course": "RS101",
+    "name": "Week 2 - Fuels and Oxidizers",
+    "lessons": [
+      { "id": "RS101-M2-L1", "name": "Chemical Propellants" },
+      { "id": "RS101-M2-L2", "name": "Cryogenic Fuels" },
+      { "id": "RS101-M2-L3", "name": "Hybrid Propulsion" }
+    ]
+  },
+  {
+    "course": "RS101",
+    "name": "Week 3 - Engine Design",
+    "lessons": [
+      { "id": "RS101-M3-L1", "name": "Nozzle Design" },
+      { "id": "RS101-M3-L2", "name": "Combustion Instabilities" },
+      { "id": "RS101-M3-L3", "name": "Materials for Engines" }
+    ]
+  },
+  {
+    "course": "RS102",
+    "name": "Week 1 - Flow Fundamentals",
+    "lessons": [
+      { "id": "RS102-M1-L1", "name": "Continuity and Bernoulli" },
+      { "id": "RS102-M1-L2", "name": "Viscosity and Boundary Layers" },
+      { "id": "RS102-M1-L3", "name": "Compressible Flow" }
+    ]
+  },
+  {
+    "course": "RS102",
+    "name": "Week 2 - Airfoils",
+    "lessons": [
+      { "id": "RS102-M2-L1", "name": "Lift and Drag" },
+      { "id": "RS102-M2-L2", "name": "Airfoil Geometry" },
+      { "id": "RS102-M2-L3", "name": "Wind Tunnel Testing" }
+    ]
+  },
+  {
+    "course": "RS102",
+    "name": "Week 3 - High Speed Aerodynamics",
+    "lessons": [
+      { "id": "RS102-M3-L1", "name": "Shock Waves" },
+      { "id": "RS102-M3-L2", "name": "Supersonic Drag" },
+      { "id": "RS102-M3-L3", "name": "Design Considerations" }
+    ]
+  },
+  {
+    "course": "RS103",
+    "name": "Week 1 - Systems Overview",
+    "lessons": [
+      { "id": "RS103-M1-L1", "name": "Spacecraft Subsystems" },
+      { "id": "RS103-M1-L2", "name": "Power and Thermal" },
+      { "id": "RS103-M1-L3", "name": "Attitude Control" }
+    ]
+  },
+  {
+    "course": "RS103",
+    "name": "Week 2 - Structural Design",
+    "lessons": [
+      { "id": "RS103-M2-L1", "name": "Load Paths" },
+      { "id": "RS103-M2-L2", "name": "Materials" },
+      { "id": "RS103-M2-L3", "name": "Testing" }
+    ]
+  },
+  {
+    "course": "RS103",
+    "name": "Week 3 - Integration",
+    "lessons": [
+      { "id": "RS103-M3-L1", "name": "Payload Integration" },
+      { "id": "RS103-M3-L2", "name": "Interface Control" },
+      { "id": "RS103-M3-L3", "name": "Launch Considerations" }
+    ]
+  }
+]

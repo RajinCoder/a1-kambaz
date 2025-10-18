@@ -9,51 +9,9 @@ import {
   CardText,
   Button,
 } from "react-bootstrap";
+import * as db from "../Database";
 
-const courses = [
-  {
-    id: "1234",
-    title: "CS1234 React JS",
-    desc: "Full Stack software developer",
-    img: "/images/courses/cool.jpg",
-  },
-  {
-    id: "12345",
-    title: "CS12345 Photography 1",
-    desc: "Junior Photographer",
-    img: "/images/courses/cool2.jpg",
-  },
-  {
-    id: "123456",
-    title: "CS123456 Photography 2",
-    desc: "Junior Photographer I",
-    img: "/images/courses/cool3.jpg",
-  },
-  {
-    id: "1234567",
-    title: "CS1234567 Photography 3",
-    desc: "Junior Photographer II",
-    img: "/images/courses/cool4.jpg",
-  },
-  {
-    id: "1",
-    title: "CS1 Photography 4",
-    desc: "Photographer I",
-    img: "/images/courses/cool5.jpg",
-  },
-  {
-    id: "12",
-    title: "CS12 Photography 5",
-    desc: "Photographer II",
-    img: "/images/courses/cool6.jpg",
-  },
-  {
-    id: "123",
-    title: "CS123 Photography 6",
-    desc: "Principal Photographer",
-    img: "/images/courses/cool7.jpg",
-  },
-];
+const courses = db.courses;
 
 export default function Dashboard() {
   return (
@@ -65,31 +23,31 @@ export default function Dashboard() {
 
       <div id="wd-dashboard-courses">
         <Row xs={1} sm={2} md={4} lg={4} xl={5} className="g-4">
-          {courses.map((c) => (
+          {courses.map((course) => (
             <Col
-              key={c.id}
+              key={course._id}
               className="wd-dashboard-course"
               style={{ width: "300px" }}
             >
               <Card>
                 <Link
-                  href={`/Courses/${c.id}/Home`}
+                  href={`/Courses/${course._id}/Home`}
                   className="wd-dashboard-course-link text-decoration-none text-dark"
                 >
                   <CardImg
                     variant="top"
-                    src={c.img}
+                    src={"/images/reactjs.jpg"}
                     style={{ height: 160, objectFit: "cover" }}
                   />
                   <CardBody>
                     <CardTitle className="wd-dashboard-course-title text-nowrap overflow-hidden">
-                      {c.title}
+                      {course.name}
                     </CardTitle>
                     <CardText
                       className="wd-dashboard-course-description overflow-hidden"
                       style={{ height: "100px" }}
                     >
-                      {c.desc}
+                      {course.description}
                     </CardText>
                     <Button variant="primary">Go</Button>
                   </CardBody>
