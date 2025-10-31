@@ -4,20 +4,25 @@ export default function Labs() {
     <div id="wd-labs">
       <h1>Labs</h1>
       <h2>Peter Moise</h2>
-      <ul>
-        <li>
-          <Link href="/Labs/Lab1" id="wd-lab1-link">
-            Lab 1: HTML Examples{" "}
+      <ul className="nav nav-pills">
+        <li className="nav-item">
+          <Link className="nav-link" href="/Labs/Lab1" id="wd-lab1-link">
+            Lab 1
           </Link>
         </li>
-        <li>
-          <Link href="/Labs/Lab2" id="wd-lab2-link">
-            Lab 2: CSS Basics{" "}
+        <li className="nav-item">
+          <Link className="nav-link " href="/Labs/Lab2" id="wd-lab2-link">
+            Lab 2
           </Link>
         </li>
-        <li>
-          <Link href="/Labs/Lab3" id="wd-lab3-link">
-            Lab 3: JavaScript Fundamentals{" "}
+        <li className="nav-item">
+          <Link className="nav-link" href="/Labs/Lab3" id="wd-lab3-link">
+            Lab 3
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link className="nav-link active" href="/Labs/Lab3" id="wd-lab3-link">
+            Lab 4
           </Link>
         </li>
       </ul>
