@@ -1,6 +1,8 @@
+"use client";
 import AddRedux from "./AddRedux";
 import CounterRedux from "./CounterRedux";
 import HelloRedux from "./HelloRedux";
+import TodoList from "./todos/TodoList";
 
 export default function ReduxExamples() {
   return (
@@ -9,6 +11,8 @@ export default function ReduxExamples() {
       <HelloRedux />
       <CounterRedux />
       <AddRedux />
+      <h3 className="mt-3">Todo List</h3>
+      <TodoList />
     </div>
   );
 }

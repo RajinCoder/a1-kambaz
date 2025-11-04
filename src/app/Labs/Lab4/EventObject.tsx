@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, type MouseEvent } from "react";
 export default function EventObject() {
-  const [event, setEvent] = useState(null);
-  const handleClick = (e: any) => {
-    e.target = e.target.outerHTML;
-    delete e.view;
-    setEvent(e);
+  type EventPreview = { type: string; timeStamp: number; target: string };
+  const [event, setEvent] = useState<EventPreview | null>(null);
+  const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
+    const target = (e.currentTarget as HTMLButtonElement).outerHTML;
+    setEvent({ type: e.type, timeStamp: e.timeStamp, target });
   };
   return (
     <div>
