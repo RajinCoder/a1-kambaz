@@ -1,91 +1,79 @@
 "use client";
-import {
-  ListGroup,
-  ListGroupItem,
-  Button,
-  InputGroup,
-  FormControl,
-} from "react-bootstrap";
-import { FaPlus, FaSearch } from "react-icons/fa";
-import Link from "next/link";
-import { BsGripVertical } from "react-icons/bs";
-import { useParams } from "next/navigation";
-import * as db from "../../../Database";
-
-type Assignment = {
-  course: string;
-  id: string;
-  title: string;
-  description?: string;
-  points?: number;
-  dueDate?: string;
-  availableDate?: string;
-};
+import { useParams, useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../store";
+import { deleteAssignment } from "../../Assignments/reducer";
+import { Button, ListGroup } from "react-bootstrap";
+import { FaPlus, FaTrash } from "react-icons/fa";
 
 export default function Assignments() {
   const { cid } = useParams();
-  const assignments = db.assignments || [];
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const { assignments } = useSelector(
+    (state: RootState) => state.assignmentsReducer
+  );
+  const { currentUser } = useSelector(
+    (state: RootState) => state.accountReducer
+  );
+  const canEdit =
+    currentUser?.role === "FACULTY" || currentUser?.role === "ADMIN";
+
+  const courseAssignments = assignments.filter((a) => a.course === cid);
+
+  const onCreate = () => router.push(`/Courses/${cid}/Assignments/new`);
+  const onOpen = (aid: string) =>
+    router.push(`/Courses/${cid}/Assignments/${aid}`);
+  const onDelete = (aid: string) => {
+    if (typeof window !== "undefined") {
+      if (window.confirm("Are you sure you want to remove this assignment?")) {
+        dispatch(deleteAssignment(aid));
+      }
+    }
+  };
 
   return (
-    <div>
-      <div className="d-flex align-items-center mb-3">
-        <div className="flex-grow-1 me-2">
-          <InputGroup>
-            <span className="input-group-text bg-white border-end-0">
-              <FaSearch />
-            </span>
-            <FormControl
-              placeholder="Search for Assignment"
-              className="border-start-0"
-            />
-          </InputGroup>
-        </div>
-        <div>
-          <Button variant="outline-secondary" className="me-2">
-            <FaPlus className="me-1" /> Group
+    <div id="wd-assignments-screen">
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <h3 className="mb-0">Assignments</h3>
+        {canEdit && (
+          <Button id="wd-add-assignment-btn" onClick={onCreate}>
+            <FaPlus className="me-2" /> Assignment
           </Button>
-          <Button variant="success">
-            <FaPlus className="me-1" /> Assignment
-          </Button>
-        </div>
+        )}
       </div>
 
-      <ListGroup className="rounded-0">
-        {assignments
-          .filter((a: Assignment) => a.course === cid)
-          .map((a: Assignment) => (
-            <ListGroupItem
-              className="wd-lesson p-3 mb-3 d-flex align-items-start"
-              key={a.id}
+      <ListGroup>
+        {courseAssignments.map((a) => (
+          <ListGroup.Item
+            key={a._id}
+            className="d-flex justify-content-between align-items-center"
+          >
+            <div
+              role="button"
+              tabIndex={0}
+              className="flex-fill"
+              onClick={() => onOpen(a._id)}
+              onKeyDown={(e) => e.key === "Enter" && onOpen(a._id)}
             >
-              <BsGripVertical className="me-3 fs-4 text-muted" />
-              <div className="flex-grow-1">
-                <div className="d-flex justify-content-between align-items-start">
-                  <div>
-                    <div className="fw-bold">
-                      <Link href={`/Courses/${cid}/Assignments/${a.id}`}>
-                        {a.title}
-                      </Link>
-                    </div>
-                    <div className="text-muted small">
-                      Due {a.dueDate} · Opens {a.availableDate} · {a.points} pts
-                    </div>
-                  </div>
-                  <div>
-                    <Link
-                      href={`/Courses/${cid}/Assignments/${a.id}`}
-                      className="btn btn-outline-secondary btn-sm me-2"
-                    >
-                      Edit
-                    </Link>
-                    <Button variant="secondary" size="sm">
-                      View
-                    </Button>
-                  </div>
-                </div>
+              <div className="fw-bold">{a.title}</div>
+              <div className="text-muted small">
+                Due {a.dueDate || "TBD"} • {a.points ?? 0} pts
               </div>
-            </ListGroupItem>
-          ))}
+            </div>
+            {canEdit && (
+              <Button
+                variant="outline-danger"
+                size="sm"
+                className="ms-2"
+                aria-label="Delete assignment"
+                onClick={() => onDelete(a._id)}
+              >
+                <FaTrash />
+              </Button>
+            )}
+          </ListGroup.Item>
+        ))}
       </ListGroup>
     </div>
   );

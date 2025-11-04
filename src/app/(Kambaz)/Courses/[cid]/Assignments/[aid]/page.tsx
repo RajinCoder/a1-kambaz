@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
-import { useParams } from "next/navigation";
-import * as db from "../../../../Database";
+import { useEffect, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams, useRouter } from "next/navigation";
+import { RootState } from "../../../../store";
+import { addAssignment, updateAssignment } from "../../../Assignments/reducer";
+import type { Assignment } from "../../../Assignments/reducer";
 import {
   Form,
   Row,
@@ -13,37 +15,83 @@ import {
   FormControl,
 } from "react-bootstrap";
 
-type Assignment = {
-  course: string;
-  id: string;
-  title: string;
-  description?: string;
-  points?: number;
-  dueDate?: string;
-  availableDate?: string;
-};
-
 export default function AssignmentEditor() {
   const { cid, aid } = useParams();
-  const assignments: Assignment[] = db.assignments || [];
-  const assignment = assignments.find((a) => a.course === cid && a.id === aid);
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const { assignments } = useSelector(
+    (state: RootState) => state.assignmentsReducer
+  );
+  const { currentUser } = useSelector(
+    (state: RootState) => state.accountReducer
+  );
+  const canEdit =
+    currentUser?.role === "FACULTY" || currentUser?.role === "ADMIN";
 
-  // call hooks unconditionally (avoid early-return before hooks)
-  const [title, setTitle] = useState<string>(assignment?.title ?? "");
+  const isNew = aid === "new";
+  const existing = useMemo(
+    () => assignments.find((a: Assignment) => a._id === aid),
+    [assignments, aid]
+  );
+
+  // Controlled form state
+  const [title, setTitle] = useState<string>(existing?.title ?? "");
   const [description, setDescription] = useState<string>(
-    assignment?.description ?? ""
+    existing?.description ?? ""
   );
-  const [points, setPoints] = useState<number | "">(assignment?.points ?? "");
-  const [availableDate, setAvailableDate] = useState<string>(
-    assignment?.availableDate ?? ""
+  const [points, setPoints] = useState<number | "">(existing?.points ?? "");
+  const [availableFrom, setAvailableFrom] = useState<string>(
+    existing?.availableFrom ?? ""
   );
-  const [dueDate, setDueDate] = useState<string>(assignment?.dueDate ?? "");
+  const [availableUntil, setAvailableUntil] = useState<string>(
+    existing?.availableUntil ?? ""
+  );
+  const [dueDate, setDueDate] = useState<string>(existing?.dueDate ?? "");
 
-  if (!assignment) return <div>Assignment not found</div>;
+  useEffect(() => {
+    if (!isNew && !existing) {
+      // assignment not found; navigate back
+      router.replace(`/Courses/${cid}/Assignments`);
+    }
+  }, [cid, isNew, existing, router]);
+
+  const goBack = () => router.replace(`/Courses/${cid}/Assignments`);
+  const onSave = () => {
+    if (!canEdit) return goBack();
+    if (isNew) {
+      dispatch(
+        addAssignment({
+          course: cid,
+          title,
+          description,
+          points,
+          dueDate,
+          availableFrom,
+          availableUntil,
+        })
+      );
+    } else if (existing) {
+      dispatch(
+        updateAssignment({
+          _id: existing._id,
+          course: cid,
+          title,
+          description,
+          points,
+          dueDate,
+          availableFrom,
+          availableUntil,
+        })
+      );
+    }
+    goBack();
+  };
+
+  const disabled = !canEdit && !isNew; // students see read-only for existing
 
   return (
     <div id="wd-edit-assignment" className="p-3">
-      <h3 className="mb-3">Edit Assignment</h3>
+      <h3 className="mb-3">{isNew ? "New Assignment" : "Edit Assignment"}</h3>
 
       <Form>
         <FormGroup className="mb-3" controlId="assignmentTitle">
@@ -52,6 +100,7 @@ export default function AssignmentEditor() {
             type="text"
             value={title}
             onChange={(e) => setTitle((e.target as HTMLInputElement).value)}
+            disabled={disabled}
           />
         </FormGroup>
 
@@ -64,6 +113,7 @@ export default function AssignmentEditor() {
             onChange={(e) =>
               setDescription((e.target as HTMLTextAreaElement).value)
             }
+            disabled={disabled}
           />
         </FormGroup>
 
@@ -78,19 +128,35 @@ export default function AssignmentEditor() {
                   const v = (e.target as HTMLInputElement).value;
                   setPoints(v ? Number(v) : "");
                 }}
+                disabled={disabled}
               />
             </FormGroup>
           </Col>
 
           <Col md={3} className="mb-2">
-            <FormGroup controlId="availableDate">
-              <FormLabel>Available Date</FormLabel>
+            <FormGroup controlId="availableFrom">
+              <FormLabel>Available From</FormLabel>
               <FormControl
                 type="date"
-                value={availableDate}
+                value={availableFrom}
                 onChange={(e) =>
-                  setAvailableDate((e.target as HTMLInputElement).value)
+                  setAvailableFrom((e.target as HTMLInputElement).value)
                 }
+                disabled={disabled}
+              />
+            </FormGroup>
+          </Col>
+
+          <Col md={3} className="mb-2">
+            <FormGroup controlId="availableUntil">
+              <FormLabel>Available Until</FormLabel>
+              <FormControl
+                type="date"
+                value={availableUntil}
+                onChange={(e) =>
+                  setAvailableUntil((e.target as HTMLInputElement).value)
+                }
+                disabled={disabled}
               />
             </FormGroup>
           </Col>
@@ -104,23 +170,31 @@ export default function AssignmentEditor() {
                 onChange={(e) =>
                   setDueDate((e.target as HTMLInputElement).value)
                 }
+                disabled={disabled}
               />
             </FormGroup>
           </Col>
 
-          <Col md={3} className="d-flex align-items-end mb-2">
-            <Link
-              href={`/Courses/${cid}/Assignments`}
+          <Col
+            md={12}
+            className="d-flex justify-content-end align-items-end mt-2"
+          >
+            <button
+              type="button"
               className="btn btn-outline-secondary me-2"
+              onClick={goBack}
             >
               Cancel
-            </Link>
-            <Link
-              href={`/Courses/${cid}/Assignments`}
-              className="btn btn-primary"
-            >
-              Save
-            </Link>
+            </button>
+            {canEdit && (
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={onSave}
+              >
+                Save
+              </button>
+            )}
           </Col>
         </Row>
       </Form>

@@ -27,6 +27,7 @@ export default function ModuleEditor({
           onChange={(e) => {
             setModuleName(e.target.value);
           }}
+          placeholder="Module name"
         />
       </Modal.Body>
       <Modal.Footer>
@@ -39,6 +40,7 @@ export default function ModuleEditor({
             addModule();
             handleClose();
           }}
+          disabled={!moduleName.trim()}
         >
           Add Module
         </Button>
