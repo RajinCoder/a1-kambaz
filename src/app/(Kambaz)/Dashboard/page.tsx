@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useState } from "react";
 import Link from "next/link";
@@ -12,11 +13,13 @@ import {
   Button,
   FormControl,
 } from "react-bootstrap";
-import * as db from "../Database";
-import { v4 as uuidv4 } from "uuid";
+import { useDispatch, useSelector } from "react-redux";
+import { addNewCourse, deleteCourse, updateCourse } from "../Courses/reducer";
+import { RootState } from "../store";
 
 export default function Dashboard() {
-  const [courses, setCourses] = useState<any[]>(db.courses);
+  const { courses } = useSelector((state: RootState) => state.coursesReducer);
+  const dispatch = useDispatch();
   const [course, setCourse] = useState<any>({
     _id: "0",
     name: "New Course",
@@ -26,24 +29,6 @@ export default function Dashboard() {
     image: "/images/reactjs.jpg",
     description: "New Description",
   });
-  const addNewCourse = () => {
-    const newCourse = { ...course, _id: uuidv4() };
-    setCourses([...courses, newCourse]);
-  };
-  const deleteCourse = (courseId: string) => {
-    setCourses(courses.filter((course) => course._id !== courseId));
-  };
-  const updateCourse = () => {
-    setCourses(
-      courses.map((c) => {
-        if (c._id === course._id) {
-          return course;
-        } else {
-          return c;
-        }
-      })
-    );
-  };
   return (
     <div id="wd-dashboard">
       <h1 id="wd-dashboard-title">Dashboard</h1>
@@ -53,13 +38,13 @@ export default function Dashboard() {
         <button
           className="btn btn-primary float-end"
           id="wd-add-new-course-click"
-          onClick={addNewCourse}
+          onClick={() => dispatch(addNewCourse(course))}
         >
           Add
         </button>
         <button
           className="btn btn-warning float-end me-2"
-          onClick={updateCourse}
+          onClick={() => dispatch(updateCourse(course))}
           id="wd-update-course-click"
         >
           Update
@@ -113,7 +98,7 @@ export default function Dashboard() {
                     <Button
                       onClick={(event) => {
                         event.preventDefault();
-                        deleteCourse(course._id);
+                        dispatch(deleteCourse(course._id));
                       }}
                       variant="danger"
                       className="float-end"
