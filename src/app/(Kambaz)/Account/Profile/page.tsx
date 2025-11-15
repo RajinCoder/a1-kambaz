@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import * as client from "../client";
 import { useSelector, useDispatch } from "react-redux";
 import { setCurrentUser } from "../reducer";
 import { RootState } from "../../store";
@@ -26,7 +27,13 @@ export default function Profile() {
   );
   const router = useRouter();
 
-  const signout = () => {
+  const signout = async () => {
+    try {
+      await client.signout();
+    } catch (err) {
+      // ignore errors for now (best-effort signout)
+      console.error(err);
+    }
     dispatch(setCurrentUser(null));
     router.replace("/Account/SignIn");
   };
@@ -38,6 +45,11 @@ export default function Profile() {
     }
     setProfile(currentUser);
   }, [currentUser, router]);
+
+  const updateProfile = async () => {
+    const updatedProfile = await client.updateUser(profile);
+    dispatch(setCurrentUser(updatedProfile));
+  };
 
   return (
     <div id="wd-profile-screen" className="p-3" style={{ maxWidth: 600 }}>
@@ -102,7 +114,18 @@ export default function Profile() {
             <option value="FACULTY">Faculty</option>
             <option value="STUDENT">Student</option>
           </select>
-          <Button onClick={signout} className="w-100 mb-2" id="wd-signout-btn">
+          <Button
+            onClick={updateProfile}
+            className="w-100 mb-2"
+            id="wd-update-profile"
+          >
+            Update
+          </Button>
+          <Button
+            onClick={signout}
+            className="w-100 mb-2 btn-danger"
+            id="wd-signout-btn"
+          >
             Sign out
           </Button>
         </div>

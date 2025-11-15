@@ -5,7 +5,12 @@ const HTTP_SERVER = process.env.NEXT_PUBLIC_HTTP_SERVER || "";
 
 export default function WorkingWithArrays() {
   const API = `${HTTP_SERVER}/lab5/todos`;
-  const [todo, setTodo] = useState({ id: "1", title: "Task 1" });
+  const [todo, setTodo] = useState({
+    id: "1",
+    title: "Task 1",
+    description: "Task description",
+    completed: false,
+  });
 
   return (
     <div id="wd-working-with-arrays">
@@ -62,6 +67,45 @@ export default function WorkingWithArrays() {
         value={todo.id}
         onChange={(e) => setTodo({ ...todo, id: e.target.value })}
       />
+      <hr />
+
+      <h4>Editing Todo Properties</h4>
+      <div className="mb-2">
+        <label className="form-label me-2">Description</label>
+        <FormControl
+          id="wd-todo-description"
+          className="w-75"
+          value={todo.description}
+          onChange={(e) => setTodo({ ...todo, description: e.target.value })}
+        />
+        <a
+          id="wd-update-todo-description"
+          className="btn btn-primary ms-2"
+          href={`${API}/${todo.id}/description/${encodeURIComponent(
+            todo.description
+          )}`}
+        >
+          Describe Todo ID = {todo.id}
+        </a>
+      </div>
+
+      <div className="mb-2">
+        <label className="form-check-label me-2">Completed</label>
+        <input
+          id="wd-todo-completed"
+          type="checkbox"
+          className="form-check-input"
+          checked={todo.completed}
+          onChange={(e) => setTodo({ ...todo, completed: e.target.checked })}
+        />
+        <a
+          id="wd-update-todo-completed"
+          className="btn btn-primary ms-2"
+          href={`${API}/${todo.id}/completed/${todo.completed}`}
+        >
+          Complete Todo ID = {todo.id}
+        </a>
+      </div>
       <hr />
 
       <h4>Updating an Item in an Array</h4>
