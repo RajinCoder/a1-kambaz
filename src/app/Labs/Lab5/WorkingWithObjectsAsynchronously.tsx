@@ -14,7 +14,7 @@ export default function WorkingWithObjectsAsynchronously() {
   useEffect(() => {
     fetchAssignment();
   }, []);
-
+  // so annoying
   const _handleUpdateTitle = async () => {
     if (!assignment?.title) return;
     const updated = await client.updateTitle(assignment.title);
