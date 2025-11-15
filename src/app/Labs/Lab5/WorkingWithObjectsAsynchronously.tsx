@@ -15,7 +15,7 @@ export default function WorkingWithObjectsAsynchronously() {
     fetchAssignment();
   }, []);
 
-  const handleUpdateTitle = async () => {
+  const _handleUpdateTitle = async () => {
     if (!assignment?.title) return;
     const updated = await client.updateTitle(assignment.title);
     setAssignment(updated || assignment);

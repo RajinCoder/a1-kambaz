@@ -67,7 +67,7 @@ export default function Dashboard() {
     }
   };
 
-  const onAddNewCourse = async () => {
+  const _addNewCourse = async () => {
     try {
       const newCourse = await client.createCourse(course);
       dispatch(setCourses([...courses, newCourse]));
@@ -76,7 +76,7 @@ export default function Dashboard() {
     }
   };
 
-  const onUpdateCourse = async () => {
+  const _updateCourse = async () => {
     try {
       const updated = await client.updateCourse(course);
       dispatch(
@@ -89,7 +89,7 @@ export default function Dashboard() {
     }
   };
 
-  const onDeleteCourse = async (courseId: string) => {
+  const _deleteCourse = async (courseId: string) => {
     try {
       await client.deleteCourse(courseId);
       dispatch(setCourses(courses.filter((c: any) => c._id !== courseId)));
@@ -98,9 +98,10 @@ export default function Dashboard() {
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchCourses();
-  }, [currentUser]);
+  }, []);
 
   return (
     <div id="wd-dashboard">
@@ -111,7 +112,7 @@ export default function Dashboard() {
         <button
           className="btn btn-primary float-end"
           id="wd-add-new-course-click"
-          onClick={onAddNewCourse}
+          onClick={_addNewCourse}
         >
           Add
         </button>
@@ -124,7 +125,7 @@ export default function Dashboard() {
         </button>
         <button
           className="btn btn-secondary float-end me-2"
-          onClick={onUpdateCourse}
+          onClick={_updateCourse}
           id="wd-update-course-click"
         >
           Update
@@ -217,7 +218,7 @@ export default function Dashboard() {
                     <Button
                       onClick={(event) => {
                         event.preventDefault();
-                        onDeleteCourse(course._id);
+                        _deleteCourse(course._id);
                       }}
                       variant="danger"
                       className="float-end"

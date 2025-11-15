@@ -35,6 +35,7 @@ export default function Modules() {
   const dispatch = useDispatch();
   const [moduleName, setModuleName] = useState<string>("");
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (cid) {
       fetchModules();

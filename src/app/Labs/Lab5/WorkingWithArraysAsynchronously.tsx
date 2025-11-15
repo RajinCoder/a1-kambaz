@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from "react";
 import * as client from "./client";
 import { ListGroup, ListGroupItem, FormControl } from "react-bootstrap";
@@ -6,9 +5,16 @@ import { FaTrash, FaPlusCircle } from "react-icons/fa";
 import { TiDelete } from "react-icons/ti";
 import { FaPencil } from "react-icons/fa6";
 
+// Define the Todo type
+interface Todo {
+  id: string | number;
+  title: string;
+  completed: boolean;
+  editing?: boolean;
+}
+
 export default function WorkingWithArraysAsynchronously() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [todos, setTodos] = useState<any[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const fetchTodos = async () => {
@@ -16,30 +22,34 @@ export default function WorkingWithArraysAsynchronously() {
     setTodos(t || []);
   };
 
-  const removeTodo = async (todo: any) => {
+  const removeTodo = async (todo: Todo) => {
     const updated = await client.removeTodo(todo);
     setTodos(updated || []);
   };
 
-  const deleteTodo = async (todo: any) => {
+  const deleteTodo = async (todo: Todo) => {
     try {
       await client.deleteTodo(todo);
       setTodos((prev) => prev.filter((t) => t.id !== todo.id));
       setErrorMessage(null);
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const error = err as {
+        response?: { data?: { message?: string } };
+        message?: string;
+      };
       setErrorMessage(
-        err?.response?.data?.message || err?.message || "Delete failed"
+        error?.response?.data?.message || error?.message || "Delete failed"
       );
     }
   };
 
-  const editTodo = (todo: any) => {
+  const editTodo = (todo: Todo) => {
     setTodos((prev) =>
       prev.map((t) => (t.id === todo.id ? { ...t, editing: true } : t))
     );
   };
 
-  const updateTodo = async (todoToUpdate: any) => {
+  const updateTodo = async (todoToUpdate: Todo) => {
     try {
       await client.updateTodo(todoToUpdate);
       setTodos((prev) =>
@@ -48,9 +58,13 @@ export default function WorkingWithArraysAsynchronously() {
         )
       );
       setErrorMessage(null);
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const error = err as {
+        response?: { data?: { message?: string } };
+        message?: string;
+      };
       setErrorMessage(
-        err?.response?.data?.message || err?.message || "Update failed"
+        error?.response?.data?.message || error?.message || "Update failed"
       );
     }
   };
