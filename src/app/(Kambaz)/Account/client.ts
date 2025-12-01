@@ -1,5 +1,5 @@
 import axios from "axios";
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 const axiosWithCredentials = axios.create({ withCredentials: true });
 
