@@ -8,7 +8,7 @@ export default function AccountPage() {
     (state: RootState) => state.accountReducer
   );
   if (!currentUser) {
-    redirect("/Account/SignIn");
+    redirect("/Account/Signin");
   } else {
     redirect("/Account/Profile");
   }

@@ -1,43 +1,24 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { setCurrentUser } from "../reducer";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
 import * as db from "../../Database";
 import { FormControl, Button } from "react-bootstrap";
+import * as client from "../client";
 
-type Credentials = { username: string; password: string };
 export default function Signin() {
-  const [credentials, setCredentials] = useState<Credentials>({
-    username: "",
-    password: "",
-  });
+  const [credentials, setCredentials] = useState<any>({});
   const dispatch = useDispatch();
-  const router = useRouter();
-  const signin = () => {
-    // Flexible matching since users.json has no username/password
-    // Match on loginId, or firstName (case-insensitive), or "First Last"
-    const user = (db.users as Array<Record<string, unknown>>).find((u) => {
-      const uname = (credentials.username ?? "")
-        .toString()
-        .trim()
-        .toLowerCase();
-      const first =
-        (u.firstName as string | undefined)?.toString().toLowerCase() ?? "";
-      const last =
-        (u.lastName as string | undefined)?.toString().toLowerCase() ?? "";
-      const full = `${first} ${last}`.trim();
-      return (
-        (u.loginId as string | undefined)?.toString().toLowerCase() === uname ||
-        first === uname ||
-        full === uname
-      );
-    });
+  const signin = async () => {
+    const user = await client.signin(credentials);
     if (!user) return;
     dispatch(setCurrentUser(user));
-    router.replace("/Dashboard");
+    redirect("/Dashboard");
   };
+
   return (
     <div id="wd-signin-screen" className="p-3" style={{ maxWidth: 400 }}>
       <h1>Sign in</h1>

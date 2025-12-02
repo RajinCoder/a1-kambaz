@@ -34,9 +34,8 @@ export default function CourseNavigation({
           pathname?.includes(`/${label}`) ||
           (label === "Home" && pathname?.endsWith("/Home"));
         return (
-          <>
+          <div key={label}>
             <Link
-              key={label}
               href={href}
               id={`wd-course-${label.toLowerCase()}-link`}
               className={`list-group-item border-0 ${
@@ -46,7 +45,7 @@ export default function CourseNavigation({
               {label}
             </Link>
             <br />
-          </>
+          </div>
         );
       })}
     </div>
