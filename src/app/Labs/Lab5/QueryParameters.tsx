@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { FormControl } from "react-bootstrap";
 
-const HTTP_SERVER = process.env.NEXT_PUBLIC_HTTP_SERVER || "";
+const HTTP_SERVER = process.env.NEXT_PUBLIC_HTTP_SERVER_A5 || "";
 export default function QueryParameters() {
   const [a, setA] = useState("10");
   const [b, setB] = useState("3");
