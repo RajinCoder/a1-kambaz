@@ -1,26 +1,24 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
-import React, { useState } from "react";
-import * as client from "../client";
-import { Button, FormControl } from "react-bootstrap";
+import { redirect, useRouter } from "next/navigation";
 import { setCurrentUser } from "../reducer";
+import { useDispatch } from "react-redux";
+import { useState } from "react";
+import * as db from "../../Database";
+import { FormControl, Button } from "react-bootstrap";
+import * as client from "../client";
 
-type Credentials = { username: string; password: string };
 export default function Signin() {
-  const [credentials, setCredentials] = useState<Credentials>({
-    username: "",
-    password: "",
-  });
+  const [credentials, setCredentials] = useState<any>({});
   const dispatch = useDispatch();
-  const router = useRouter();
   const signin = async () => {
     const user = await client.signin(credentials);
     if (!user) return;
     dispatch(setCurrentUser(user));
-    router.push("/Dashboard");
+    redirect("/Dashboard");
   };
+
   return (
     <div id="wd-signin-screen" className="p-3" style={{ maxWidth: 400 }}>
       <h1>Sign in</h1>

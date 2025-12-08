@@ -12,7 +12,7 @@ import {
   setModules,
   addModule,
   editModule,
-  updateModule as updateModuleAction,
+  updateModule,
   deleteModule,
 } from "./reducer";
 import { RootState } from "../../../store";
@@ -35,63 +35,35 @@ export default function Modules() {
   const dispatch = useDispatch();
   const [moduleName, setModuleName] = useState<string>("");
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    if (cid) {
-      fetchModules();
-    }
-  }, [cid]);
-
   const fetchModules = async () => {
-    try {
-      const modulesFromServer = await client.findModulesForCourse(
-        cid as string
-      );
-      dispatch(setModules(modulesFromServer || []));
-    } catch (err) {
-      console.error(err);
-    }
+    const modules = await client.findModulesForCourse(cid as string);
+    dispatch(setModules(modules));
   };
+  useEffect(() => {
+    fetchModules();
+  }, []);
 
-  // new handler: create module on server then update redux state
   const onCreateModuleForCourse = async () => {
     if (!cid) return;
-    if (!moduleName.trim()) return;
-    try {
-      const newModule = { name: moduleName.trim(), course: cid };
-      const created = await client.createModuleForCourse(
-        cid as string,
-        newModule
-      );
-      dispatch(setModules([...modules, created]));
-      setModuleName("");
-    } catch (err) {
-      console.error(err);
-    }
+    const newModule = { name: moduleName, course: cid as string };
+    const Mmodule = await client.createModuleForCourse(
+      cid as string,
+      newModule
+    );
+    dispatch(setModules([...modules, Mmodule]));
   };
 
-  // handler to remove module from server then update redux state
   const onRemoveModule = async (moduleId: string) => {
-    try {
-      await client.deleteModule(moduleId);
-      dispatch(setModules(modules.filter((m: Module) => m._id !== moduleId)));
-    } catch (err) {
-      console.error(err);
-    }
+    await client.deleteModule(moduleId);
+    dispatch(setModules(modules.filter((m: any) => m._id !== moduleId)));
   };
 
   const onUpdateModule = async (module: any) => {
-    try {
-      const updated = await client.updateModule(module);
-      if (updated) {
-        const newModules = modules.map((m: any) =>
-          m._id === updated._id ? updated : m
-        );
-        dispatch(setModules(newModules));
-      }
-    } catch (err) {
-      console.error(err);
-    }
+    await client.updateModule(module);
+    const newModules = modules.map((m: any) =>
+      m._id === module._id ? module : m
+    );
+    dispatch(setModules(newModules));
   };
 
   return (
@@ -119,9 +91,7 @@ export default function Modules() {
                   className="w-50 d-inline-block"
                   value={module.name}
                   onChange={(e) =>
-                    dispatch(
-                      updateModuleAction({ ...module, name: e.target.value })
-                    )
+                    dispatch(updateModule({ ...module, name: e.target.value }))
                   }
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {

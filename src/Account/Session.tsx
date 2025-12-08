@@ -1,33 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-"use client";
-import * as client from "./client";
+import * as client from "@/app/(Kambaz)/Account/client";
 import { useEffect, useState } from "react";
-import { setCurrentUser } from "./reducer";
+import { setCurrentUser } from "@/app/(Kambaz)/Account/reducer";
 import { useDispatch } from "react-redux";
-
 export default function Session({ children }: { children: any }) {
   const [pending, setPending] = useState(true);
   const dispatch = useDispatch();
-
   const fetchProfile = async () => {
     try {
       const currentUser = await client.profile();
       dispatch(setCurrentUser(currentUser));
     } catch (err: any) {
-      // keep silent on errors (no signed-in user)
       console.error(err);
     }
     setPending(false);
   };
-
   useEffect(() => {
     fetchProfile();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  if (pending) {
-    return null;
+  if (!pending) {
+    return children;
   }
-
-  return children;
 }
