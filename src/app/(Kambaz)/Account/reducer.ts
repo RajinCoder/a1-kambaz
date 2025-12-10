@@ -1,15 +1,35 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-const initialState = {
-  currentUser: null as any,
+// Define the User type based on your database structure
+interface User {
+  _id: string;
+  username: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  dob: string;
+  role: string;
+  loginId: string;
+  section: string;
+  lastActivity: string;
+  totalActivity: string;
+}
+
+// Define the account state type
+interface AccountState {
+  currentUser: User | null;
+}
+
+const initialState: AccountState = {
+  currentUser: null,
 };
 
 const accountSlice = createSlice({
   name: "account",
   initialState,
   reducers: {
-    setCurrentUser: (state, action) => {
+    setCurrentUser: (state, action: PayloadAction<User | null>) => {
       state.currentUser = action.payload;
     },
   },
